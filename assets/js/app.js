@@ -23,7 +23,11 @@
     document.documentElement.setAttribute("lang", t("html.lang"));
     document.title = t("meta.title");
 
-    $$("[data-i18n]").forEach(function (n) { n.textContent = t(n.getAttribute("data-i18n")); });
+    $$("[data-i18n]").forEach(function (n) {
+      var v = t(n.getAttribute("data-i18n"));
+      // se o texto trouxer marcação, renderiza como HTML em vez de mostrar as tags
+      if (/<\/?[a-z][\s\S]*>/i.test(v)) n.innerHTML = v; else n.textContent = v;
+    });
     $$("[data-i18n-html]").forEach(function (n) { n.innerHTML = t(n.getAttribute("data-i18n-html")); });
     $$("[data-i18n-attr]").forEach(function (n) { var p = n.getAttribute("data-i18n-attr").split("|"); n.setAttribute(p[0], t(p[1])); });
 
